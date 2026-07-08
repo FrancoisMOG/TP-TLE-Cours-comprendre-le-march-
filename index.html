@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cours : Comprendre le marché du travail - TP TLE</title>
+    
+    <!-- Import de polices industrielles et modernes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;700&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES & RESET --- */
+        :root {
+            --color-primary: #FFD700; /* Jaune Haute Visibilité */
+            --color-primary-dark: #D4B200;
+            --color-secondary: #1A2530; /* Bleu Nuit Chariot */
+            --color-accent: #0056b3; /* Bleu Action */
+            --color-danger: #D32F2F; /* Rouge Alerte */
+            --color-text: #333333;
+            --color-text-light: #f4f4f4;
+            --color-bg: #f9f9f9;
+            --color-card: #ffffff;
+            --stripe-size: 20px;
+            --spacing-unit: 1.5rem;
+            --border-radius: 4px;
+            --shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            line-height: 1.6;
+            background-image: radial-gradient(#e0e0e0 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Oswald', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        /* --- UTILITY CLASSES --- */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .highlight { color: var(--color-accent); font-weight: 700; }
+        .text-center { text-align: center; }
+        
+        /* --- MOTIF BARRAGE (Hazard Tape) --- */
+        .hazard-stripes {
+            height: 10px;
+            width: 100%;
+            background: repeating-linear-gradient(
+                45deg,
+                var(--color-primary),
+                var(--color-primary) 20px,
+                var(--color-secondary) 20px,
+                var(--color-secondary) 40px
+            );
+            border-top: 1px solid #000;
+            border-bottom: 1px solid #000;
+        }
+
+        /* --- HEADER --- */
+        header {
+            background-color: var(--color-secondary);
+            color: var(--color-text-light);
+            padding: 4rem 0 2rem;
+            position: relative;
+            border-bottom: 6px solid var(--color-primary);
+            clip-path: polygon(0 0, 100% 0, 100% 95%, 0 100%);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.5);
+        }
+
+        header .subtitle {
+            font-size: 1.2rem;
+            color: var(--color-primary);
+            font-weight: 500;
+        }
+
+        /* --- INTRO SECTION --- */
+        .intro {
+            background: white;
+            padding: 3rem;
+            margin-top: -20px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            position: relative;
+            border-left: 5px solid var(--color-accent);
+        }
+
+        .intro ul {
+            list-style: none;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .intro li {
+            background: #eef2f5;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .intro li::before {
+            content: '➜';
+            color: var(--color-accent);
+            margin-right: 8px;
+        }
+
+        /* --- TOOLBAR (Audio & PDF) --- */
+        .toolbar-section {
+            display: flex;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            flex-wrap: wrap;
+        }
+
+        .audio-player-wrapper {
+            flex: 2;
+            background: var(--color-secondary);
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            box-shadow: var(--shadow);
+            color: white;
+        }
+
+        .audio-icon {
+            font-size: 2rem;
+            color: var(--color-primary);
+        }
+
+        audio {
+            width: 100%;
+            height: 40px;
+            outline: none;
+        }
+
+        .pdf-btn-wrapper {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .btn-pdf {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background-color: var(--color-danger);
+            color: white;
+            padding: 1rem 2rem;
+            text-decoration: none;
+            font-family: 'Oswald', sans-serif;
+            font-weight: 700;
+            text-transform: uppercase;
+            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(211, 47, 47, 0.3);
+            transition: all 0.2s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .btn-pdf:hover {
+            background-color: #b71c1c;
+            transform: translateY(-2px);
+        }
+
+        /* --- MAIN CONTENT GRID --- */
+        .section-block {
+            margin: 4rem 0;
+            background: var(--color-card);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border-top: 4px solid transparent;
+            transition: transform 0.2s ease;
+        }
+        
+        .section-block:hover { transform: translateY(-2px); }
+
+        .section-block h2 {
+            font-size: 2rem;
+            color: var(--color-secondary);
+            border-bottom: 2px solid #eee;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-block h2::before {
+            content: attr(data-num);
+            background: var(--color-secondary);
+            color: var(--color-primary);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin-right: 15px;
+            font-size: 1.2rem;
+        }
+
+        /* --- SPECIAL BOXES --- */
+        .box {
+            padding: 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: var(--border-radius);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .box-tip {
+            background-color: #e8f5e9;
+            border-left: 5px solid #2e7d32;
+        }
+
+        .box-error {
+            background-color: #ffebee;
+            border-left: 5px solid var(--color-danger);
+        }
+
+        .box-remember {
+            background-color: #e3f2fd;
+            border-left: 5px solid var(--color-accent);
+        }
+
+        .box-title {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 0.5rem;
+            font-family: 'Oswald', sans-serif;
+            letter-spacing: 0.5px;
+            font-size: 1.1rem;
+        }
+        
+        .box-tip .box-title { color: #2e7d32; }
+        .box-error .box-title { color: var(--color-danger); }
+        .box-remember .box-title { color: var(--color-accent); }
+
+        /* --- GRID LAYOUTS --- */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .toolbar-section { flex-direction: column; }
+            header h1 { font-size: 1.8rem; }
+        }
+
+        /* --- CARDS --- */
+        .card {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 1.5rem;
+            border-radius: var(--border-radius);
+            position: relative;
+        }
+
+        .card-header {
+            font-weight: 700;
+            color: var(--color-secondary);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        /* --- LISTS --- */
+        ul.styled-list {
+            list-style: none;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 25px;
+            margin-bottom: 0.8rem;
+        }
+
+        ul.styled-list li::before {
+            content: '■';
+            color: var(--color-accent);
+            position: absolute;
+            left: 0;
+            font-size: 0.8rem;
+            top: 4px;
+        }
+
+        /* --- FINAL QUIZ BUTTON SECTION --- */
+        .quiz-cta-section {
+            background: var(--color-secondary);
+            color: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            margin-top: 4rem;
+            border: 2px solid var(--color-primary);
+            text-align: center;
+        }
+
+        .quiz-cta-section h2 {
+            color: white;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            display: inline-block;
+            margin-bottom: 2rem;
+        }
+
+        .btn-quiz {
+            background: var(--color-primary);
+            color: var(--color-secondary);
+            border: none;
+            padding: 1rem 3rem;
+            font-family: 'Oswald';
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 1.2rem;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: transform 0.1s, background 0.2s;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn-quiz:hover {
+            background: #ffeb3b;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5);
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            margin-top: 4rem;
+            padding: 2rem 0;
+            background: #111;
+            color: #888;
+            text-align: center;
+            font-size: 0.9rem;
+            border-top: 4px solid var(--color-secondary);
+        }
+
+        .visual-separator {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: var(--border-radius);
+            margin-bottom: 2rem;
+            filter: grayscale(30%) contrast(1.1);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Hero Header -->
+    <header>
+        <div class="hazard-stripes"></div>
+        <div class="container text-center">
+            <div style="margin-bottom: 1rem; font-size: 3rem;">🎓</div>
+            <h1>Comprendre le marché du travail</h1>
+            <div class="subtitle">TP TECHNICIEN EN LOGISTIQUE D’ENTREPOSAGE</div>
+        </div>
+    </header>
+
+    <main class="container">
+
+        <!-- Introduction -->
+        <section class="intro">
+            <h3 style="color: var(--color-secondary); margin-bottom: 1rem;">INTRODUCTION</h3>
+            <p>La logistique est aujourd’hui un secteur stratégique en France : e‑commerce, grande distribution, industrie, transport, plateformes multimodales. Le Technicien en Logistique d’Entreposage occupe une place centrale : organisation des flux, gestion des stocks, optimisation des zones, supervision des opérations, coordination avec les caristes et préparateurs.</p>
+            
+            <ul>
+                <li>La réalité du secteur</li>
+                <li>Les attentes des employeurs</li>
+                <li>Les compétences techniques et comportementales</li>
+                <li>Les secteurs qui recrutent</li>
+                <li>Comment se positionner efficacement</li>
+            </ul>
+            <p style="margin-top: 1rem; font-style: italic; color: #666;">Ce cours donne une vision claire, opérationnelle et adaptée à un public adulte hétérogène.</p>
+        </section>
+
+        <!-- Toolbar (Audio & PDF) -->
+        <section class="toolbar-section">
+            <div class="audio-player-wrapper">
+                <div class="audio-icon">🎧</div>
+                <div style="flex-grow: 1;">
+                    <h4 style="margin: 0 0 0.5rem 0; color: #ccc; font-size: 0.9rem;">VERSION AUDIO</h4>
+                    <audio controls>
+                        <source src="comprendre TP TLE.m4a" type="audio/mp4">
+                        Votre navigateur ne supporte pas l'élément audio.
+                    </audio>
+                </div>
+            </div>
+
+            <div class="pdf-btn-wrapper">
+                <a href="comprendre TP TLE.pdf" class="btn-pdf" download>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                        <polyline points="14 2 14 8 20 8"></polyline>
+                        <line x1="12" y1="18" x2="12" y2="12"></line>
+                        <line x1="9" y1="15" x2="15" y2="15"></line>
+                    </svg>
+                    Télécharger le PDF
+                </a>
+            </div>
+        </section>
+
+        <!-- 1. La réalité du secteur -->
+        <section class="section-block">
+            <h2 data-num="1">La Réalité du Secteur</h2>
+            <img src="https://picsum.photos/seed/logistics5/1100/300" alt="Entrepôt logistique" class="visual-separator">
+            
+            <div class="grid-2">
+                <div>
+                    <h3>1.1 Un secteur en forte croissance</h3>
+                    <p>La logistique est portée par :</p>
+                    <ul class="styled-list">
+                        <li>L’explosion du e‑commerce.</li>
+                        <li>La modernisation des entrepôts.</li>
+                        <li>La robotisation.</li>
+                        <li>La croissance des flux internationaux.</li>
+                    </ul>
+                    <div class="box box-remember">
+                        <span class="box-title">À RETENIR</span>
+                        👉 La logistique est un secteur stable, porteur, avec une forte demande de techniciens qualifiés.
+                    </div>
+                </div>
+                <div>
+                    <h3>1.2 Les conditions de travail</h3>
+                    <ul class="styled-list">
+                        <li>Horaires décalés (2x8, 3x8).</li>
+                        <li>Travail en équipe et coordination.</li>
+                        <li>Utilisation d’outils numériques (WMS, ERP).</li>
+                        <li>Respect strict des règles de sécurité.</li>
+                        <li>Environnements variés : sec, froid, extérieur.</li>
+                    </ul>
+                    <div class="box box-error">
+                        <span class="box-title">ERREUR FRÉQUENTE</span>
+                        Penser que “technicien = bureau”.<br>
+                        👉 Le métier implique terrain, analyse, organisation, communication.
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h3>1.3 Les réalités du métier</h3>
+                <ul class="styled-list">
+                    <li>Gestion des stocks.</li>
+                    <li>Organisation des zones de stockage.</li>
+                    <li>Suivi des flux entrants/sortants.</li>
+                    <li>Contrôle qualité.</li>
+                    <li>Coordination avec les caristes et préparateurs.</li>
+                    <li>Utilisation de logiciels logistiques.</li>
+                </ul>
+                <div class="box box-tip" style="margin-top:1rem;">
+                    <span class="box-title">EXEMPLE</span>
+                    Un technicien doit analyser un taux d’erreur de préparation et proposer une réorganisation du picking pour réduire les déplacements.
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. La demande actuelle -->
+        <section class="section-block">
+            <h2 data-num="2">La Demande Actuelle</h2>
+            
+            <div class="grid-3">
+                <div class="card">
+                    <div class="card-header">🔥 Métier en tension</div>
+                    <p>Les entreprises recherchent en permanence :</p>
+                    <ul class="styled-list">
+                        <li>Des techniciens capables de gérer les flux.</li>
+                        <li>Des profils à l’aise avec le numérique.</li>
+                        <li>Des personnes capables de coordonner une équipe.</li>
+                    </ul>
+                    <div class="box box-remember" style="margin-top:1rem; padding: 1rem;">
+                        <span class="box-title" style="font-size:0.9rem;">À RETENIR</span>
+                        <span style="font-size:0.9rem;">👉 Le taux d’employabilité après un TP Technicien en Logistique est très élevé.</span>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">📈 Tendances</div>
+                    <ul class="styled-list">
+                        <li>Forte demande dans le e‑commerce.</li>
+                        <li>Techniciens polyvalents (gestion + organisation + contrôle).</li>
+                        <li>Entrepôts automatisés → profils techniques pointus.</li>
+                    </ul>
+                </div>
+                <div class="card">
+                    <div class="card-header">📝 Types de contrats</div>
+                    <ul class="styled-list">
+                        <li><strong>Intérim :</strong> Majoritaire.</li>
+                        <li><strong>CDD / CDI :</strong> Selon secteurs.</li>
+                        <li><strong>Saisonnier :</strong> Fêtes, soldes.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Éléments importants -->
+        <section class="section-block">
+            <h2 data-num="3">Éléments Importants à Connaître</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>3.1 Les outils utilisés</h3>
+                    <ul class="styled-list">
+                        <li>WMS (Warehouse Management System)</li>
+                        <li>ERP (SAP, Oracle, Sage)</li>
+                        <li>PDA / scan</li>
+                        <li>Tableaux de bord logistiques</li>
+                        <li>Transpalette / chariot (selon habilitation)</li>
+                    </ul>
+                    <div class="box box-tip">
+                        <span class="box-title">ASTUCE</span>
+                        👉 Mentionner “maîtrise des outils numériques logistiques” augmente fortement les chances d’être recruté.
+                    </div>
+                </div>
+                <div>
+                    <h3>3.2 Les règles de sécurité</h3>
+                    <ul class="styled-list">
+                        <li>Circulation en entrepôt.</li>
+                        <li>Port des EPI.</li>
+                        <li>Gestes et postures.</li>
+                        <li>Respect des zones de stockage.</li>
+                        <li>Signalement des anomalies.</li>
+                    </ul>
+                    <div class="box box-error">
+                        <span class="box-title">ERREUR FRÉQUENTE</span>
+                        Ne pas signaler une palette instable → risque d’accident → mauvaise image auprès de l’employeur.
+                    </div>
+                </div>
+            </div>
+            <div style="margin-top: 2rem;">
+                <h3>3.3 Les missions clés</h3>
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem;">
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Organisation des zones</span>
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Optimisation des flux</span>
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Contrôle qualité</span>
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Gestion des stocks</span>
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Suivi des indicateurs</span>
+                    <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Coordination</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. Secteurs qui recrutent -->
+        <section class="section-block">
+            <h2 data-num="4">Les Secteurs qui Recrutent</h2>
+            <div class="grid-2">
+                <ul class="styled-list">
+                    <li><strong>4.1 Le e‑commerce</strong> (Amazon, Cdiscount, Veepee…) : Très forte demande de techniciens pour organiser les flux.</li>
+                    <li><strong>4.2 La Grande Distribution</strong> (Carrefour, Leclerc…) : Travail en entrepôt régional.</li>
+                    <li><strong>4.3 L’Industrie</strong> (Agroalimentaire, automobile) : Gestion de pièces ou produits spécifiques.</li>
+                </ul>
+                <ul class="styled-list">
+                    <li><strong>4.4 Le Transport & Logistique</strong> : Plateformes logistiques, Cross‑dock, gestion des arrivées/départs.</li>
+                    <li><strong>4.5 Les Entrepôts Frigorifiques</strong> : Très demandeur, prime de froid.</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- 5. Compétences recherchées -->
+        <section class="section-block">
+            <h2 data-num="5">Compétences Recherchées</h2>
+            
+            <div class="grid-3">
+                <div class="card" style="border-top: 4px solid var(--color-secondary);">
+                    <div class="card-header">TECHNIQUES</div>
+                    <ul class="styled-list">
+                        <li>Gestion des stocks.</li>
+                        <li>Organisation des zones.</li>
+                        <li>Utilisation du WMS/ERP.</li>
+                        <li>Lecture d’étiquettes logistiques.</li>
+                        <li>Contrôle qualité.</li>
+                        <li>Analyse des flux.</li>
+                    </ul>
+                </div>
+                <div class="card" style="border-top: 4px solid var(--color-primary);">
+                    <div class="card-header">COMPORTEMENTALES</div>
+                    <ul class="styled-list">
+                        <li>Fiabilité.</li>
+                        <li>Ponctualité.</li>
+                        <li>Rigueur.</li>
+                        <li>Communication.</li>
+                        <li>Travail en équipe.</li>
+                        <li>Leadership opérationnel.</li>
+                    </ul>
+                    <div class="box box-remember" style="padding: 0.5rem; font-size: 0.85rem;">
+                        👉 Le savoir‑être est aussi important que la technique.
+                    </div>
+                </div>
+                <div class="card" style="border-top: 4px solid var(--color-accent);">
+                    <div class="card-header">TRANSVERSALES</div>
+                    <ul class="styled-list">
+                        <li>Gestion du stress.</li>
+                        <li>Adaptation aux cadences.</li>
+                        <li>Polyvalence.</li>
+                        <li>Utilisation des outils numériques.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 6. Conseils pratiques -->
+        <section class="section-block">
+            <h2 data-num="6">Conseils pour Réussir</h2>
+            
+            <div class="grid-2">
+                <div>
+                    <h3>6.1 Construire un CV professionnel</h3>
+                    <p>Mettre en avant :</p>
+                    <ul class="styled-list">
+                        <li>Les outils maîtrisés (WMS, ERP, scan).</li>
+                        <li>Les environnements connus (sec, froid, industrie).</li>
+                        <li>Les compétences organisationnelles.</li>
+                        <li>Les expériences de stage ou d’intérim.</li>
+                    </ul>
+                    <div class="box box-tip">
+                        <span class="box-title">ASTUCE</span>
+                        👉 Ajouter “optimisation des flux” ou “réduction des erreurs” : très apprécié des recruteurs.
+                    </div>
+                </div>
+                <div>
+                    <h3>6.2 Préparer l’entretien</h3>
+                    <p>Questions fréquentes :</p>
+                    <ul class="styled-list">
+                        <li>“Comment gérez‑vous les priorités en entrepôt ?”</li>
+                        <li>“Que faites‑vous si une rupture est détectée ?”</li>
+                        <li>“Comment réagissez‑vous en cas de retard transporteur ?”</li>
+                    </ul>
+                    <h3 style="margin-top: 1.5rem;">6.3 Comprendre les attentes</h3>
+                    <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+                        <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Sécurité</span>
+                        <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Ponctualité</span>
+                        <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Esprit d'équipe</span>
+                        <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Horaires</span>
+                        <span style="background: #eee; padding: 5px 15px; border-radius: 20px;">Motivation</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Synthèse -->
+        <section class="intro" style="background: var(--color-secondary); color: white; border-left: none; border-top: 5px solid var(--color-primary);">
+            <h3 style="color: var(--color-primary);">SYNTHÈSE – MESSAGES CLÉS</h3>
+            <ul style="color: #ccc; margin-top: 1rem;">
+                <li style="margin-bottom: 0.5rem;">• Le secteur de la logistique est en pleine croissance.</li>
+                <li style="margin-bottom: 0.5rem;">• Le métier de technicien en entreposage est très recherché.</li>
+                <li style="margin-bottom: 0.5rem;">• Les employeurs veulent des profils fiables, rigoureux, organisés, à l’aise avec le numérique.</li>
+                <li style="margin-bottom: 0.5rem;">• Une bonne insertion repose sur : <br> <em>un CV orienté compétences, une posture professionnelle solide, une maîtrise des outils logistiques, une capacité à coordonner les flux.</em></li>
+            </ul>
+        </section>
+
+        <!-- Bouton Quiz Final -->
+        <section class="quiz-cta-section">
+            <h2>PRÊT POUR LA VALIDATION ?</h2>
+            <p style="margin-bottom: 2rem;">Testez désormais vos connaissances sur notre plateforme.</p>
+            
+            <a href="https://francoismog.github.io/TP-TLE-Quiz-comprendre-le-march-/" class="btn-quiz">PASSER LE QUIZ</a>
+        </section>
+
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 Formation Logistique - Titre Pro Technicien en Logistique d’Entreposage.</p>
+            <p style="font-size: 0.8rem; margin-top: 0.5rem;">Document généré pour usage pédagogique.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
